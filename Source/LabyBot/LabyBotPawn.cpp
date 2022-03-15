@@ -136,9 +136,9 @@ void ALabyBotPawn::Raycast() {
 	FVector ForwardVector = ShipMeshComponent->GetForwardVector();
 	FVector EndForward = Start + (ForwardVector * 150.f);
 	FVector LeftVector = ShipMeshComponent->GetRightVector();
-	FVector EndLeft = Start + (LeftVector * -200.f);
+	FVector EndLeft = Start + (LeftVector * -250.f);
 	FVector RightVector = ShipMeshComponent->GetRightVector();
-	FVector EndRight = Start + (RightVector * 200.f);
+	FVector EndRight = Start + (RightVector * 250.f);
 
 	FCollisionQueryParams CollisionParms;
 	CollisionParms.AddIgnoredActor(this->GetOwner());
