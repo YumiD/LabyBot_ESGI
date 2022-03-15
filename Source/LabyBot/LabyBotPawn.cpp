@@ -148,16 +148,16 @@ void ALabyBotPawn::Raycast() {
 		//OutHit.GetActor()->Destroy();
 		switch (currentDirectionPawn) {
 		case Up:
-			currentDirectionPawn = Right;
-			break;
-		case Down:
 			currentDirectionPawn = Left;
 			break;
+		case Down:
+			currentDirectionPawn = Right;
+			break;
 		case Right:
-			currentDirectionPawn = Down;
+			currentDirectionPawn = Up;
 			break;
 		case Left:
-			currentDirectionPawn = Up;
+			currentDirectionPawn = Down;
 			break;
 		default:
 			break;
