@@ -134,22 +134,24 @@ void ALabyBotPawn::Raycast() {
 
 	FVector Start = ShipMeshComponent->GetComponentLocation();
 	FVector ForwardVector = ShipMeshComponent->GetForwardVector();
-	FVector EndForward = Start + (ForwardVector * 100.f);
-	FVector RightVector = ShipMeshComponent->GetRightVector();
-	FVector EndRight = Start + (RightVector * 100.f);
+	FVector EndForward = Start + (ForwardVector * 150.f);
 	FVector LeftVector = ShipMeshComponent->GetRightVector();
-	FVector EndLeft = Start + (LeftVector * -100.f);
+	FVector EndLeft = Start + (LeftVector * -200.f);
+	FVector RightVector = ShipMeshComponent->GetRightVector();
+	FVector EndRight = Start + (RightVector * 200.f);
 
 	FCollisionQueryParams CollisionParms;
 	CollisionParms.AddIgnoredActor(this->GetOwner());
 
 	//DrawDebugLine(GetWorld(), Start, EndForward, FColor::Green, false, 1, 0, 1);
-	//DrawDebugLine(GetWorld(), Start, EndRight, FColor::Red, false, 1, 0, 1);
 	//DrawDebugLine(GetWorld(), Start, EndLeft, FColor::Blue, false, 1, 0, 1);
+	//DrawDebugLine(GetWorld(), Start, EndRight, FColor::Red, false, 1, 0, 1);
 
 	bool isHitForward = GetWorld()->LineTraceSingleByChannel(OutHit, Start, EndForward, ECC_Visibility, CollisionParms);
-	bool isHitRight = GetWorld()->LineTraceSingleByChannel(OutHit, Start, EndRight, ECC_Visibility, CollisionParms);
 	bool isHitLeft = GetWorld()->LineTraceSingleByChannel(OutHit, Start, EndLeft, ECC_Visibility, CollisionParms);
+	//bool isHitLeft = false;
+	//bool isHitRight = GetWorld()->LineTraceSingleByChannel(OutHit, Start, EndRight, ECC_Visibility, CollisionParms);
+	bool isHitRight = false;
 
 	if (isHitForward) {
 		//OutHit.GetActor()->Destroy();
