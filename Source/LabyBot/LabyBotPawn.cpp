@@ -134,30 +134,61 @@ void ALabyBotPawn::Raycast() {
 
 	FVector Start = ShipMeshComponent->GetComponentLocation();
 	FVector ForwardVector = ShipMeshComponent->GetForwardVector();
-	FVector End = Start + (ForwardVector * 100.f);
+	FVector EndForward = Start + (ForwardVector * 100.f);
+	FVector RightVector = ShipMeshComponent->GetRightVector();
+	FVector EndRight = Start + (RightVector * 100.f);
+	FVector LeftVector = ShipMeshComponent->GetRightVector();
+	FVector EndLeft = Start + (LeftVector * -100.f);
 
 	FCollisionQueryParams CollisionParms;
 	CollisionParms.AddIgnoredActor(this->GetOwner());
 
-	//DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1, 0, 1);
+	//DrawDebugLine(GetWorld(), Start, EndForward, FColor::Green, false, 1, 0, 1);
+	//DrawDebugLine(GetWorld(), Start, EndRight, FColor::Red, false, 1, 0, 1);
+	//DrawDebugLine(GetWorld(), Start, EndLeft, FColor::Blue, false, 1, 0, 1);
 
-	bool isHit = GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility, CollisionParms);
+	bool isHitForward = GetWorld()->LineTraceSingleByChannel(OutHit, Start, EndForward, ECC_Visibility, CollisionParms);
+	bool isHitRight = GetWorld()->LineTraceSingleByChannel(OutHit, Start, EndRight, ECC_Visibility, CollisionParms);
+	bool isHitLeft = GetWorld()->LineTraceSingleByChannel(OutHit, Start, EndLeft, ECC_Visibility, CollisionParms);
 
-	UE_LOG(LogTemp, Warning, TEXT("RAYCAST"), TEXT(" RAYCAST2"));
-	if (isHit) {
+	if (isHitForward) {
 		//OutHit.GetActor()->Destroy();
 		switch (currentDirectionPawn) {
 		case Up:
 			currentDirectionPawn = Left;
+			if (isHitLeft) {
+				currentDirectionPawn = Right;
+			}
+			if (isHitRight) {
+				currentDirectionPawn = Down;
+			}
 			break;
 		case Down:
 			currentDirectionPawn = Right;
+			if (isHitLeft) {
+				currentDirectionPawn = Left;
+			}
+			if (isHitRight) {
+				currentDirectionPawn = Up;
+			}
 			break;
 		case Right:
 			currentDirectionPawn = Up;
+			if (isHitLeft) {
+				currentDirectionPawn = Down;
+			}
+			if (isHitRight) {
+				currentDirectionPawn = Left;
+			}
 			break;
 		case Left:
 			currentDirectionPawn = Down;
+			if (isHitLeft) {
+				currentDirectionPawn = Up;
+			}
+			if (isHitRight) {
+				currentDirectionPawn = Right;
+			}
 			break;
 		default:
 			break;
