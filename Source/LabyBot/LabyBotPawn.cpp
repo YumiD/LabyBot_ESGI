@@ -12,11 +12,15 @@
 #include "Engine/StaticMesh.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundBase.h"
+#include "DrawDebugHelpers.h"
 
 const FName ALabyBotPawn::MoveForwardBinding("MoveForward");
 const FName ALabyBotPawn::MoveRightBinding("MoveRight");
 const FName ALabyBotPawn::FireForwardBinding("FireForward");
 const FName ALabyBotPawn::FireRightBinding("FireRight");
+
+enum DirectionPawn { Up, Down, Right, Left };
+DirectionPawn currentDirectionPawn;
 
 ALabyBotPawn::ALabyBotPawn()
 {	
@@ -50,6 +54,8 @@ ALabyBotPawn::ALabyBotPawn()
 	GunOffset = FVector(90.f, 0.f, 0.f);
 	FireRate = 0.1f;
 	bCanFire = true;
+
+	currentDirectionPawn = Up;
 }
 
 void ALabyBotPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -65,18 +71,36 @@ void ALabyBotPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputC
 
 void ALabyBotPawn::Tick(float DeltaSeconds)
 {
+	Raycast();
+
 	// Find movement direction
 	const float ForwardValue = GetInputAxisValue(MoveForwardBinding);
-	FString ForwardValueStr = FString::SanitizeFloat(ForwardValue);
-	//UE_LOG(LogTemp, Warning, *ForwardValueStr, TEXT(" et oui"));
-	UE_LOG(LogTemp, Warning, TEXT("ForwardValueStr : "), TEXT("oui : "), *ForwardValueStr, TEXT(" et oui"));
+	//FString ForwardValueStr = FString::SanitizeFloat(ForwardValue);
+	//UE_LOG(LogTemp, Warning, TEXT("Tick"));
 	const float RightValue = GetInputAxisValue(MoveRightBinding);
 
 	// Clamp max size so that (X=1, Y=1) doesn't cause faster movement in diagonal directions
 	//const FVector MoveDirection = FVector(ForwardValue, RightValue, 0.f).GetClampedToMaxSize(1.0f);
 	
-	//Go Forward
-	const FVector MoveDirection = FVector(1.0f, RightValue, 0.f).GetClampedToMaxSize(1.0f);
+	FVector MoveDirection;
+
+	switch (currentDirectionPawn) {
+		case Up:
+			MoveDirection = FVector(1.f, 0.f, 0.f).GetClampedToMaxSize(1.0f);
+			break;
+		case Down:
+			MoveDirection = FVector(-1.f, 0.f, 0.f).GetClampedToMaxSize(1.0f);
+			break;
+		case Right:
+			MoveDirection = FVector(0.f, 1.f, 0.f).GetClampedToMaxSize(1.0f);
+			break;
+		case Left:
+			MoveDirection = FVector(0.f, -1.f, 0.f).GetClampedToMaxSize(1.0f);
+			break;
+		default:
+			MoveDirection = FVector(1.f, 0.f, 0.f).GetClampedToMaxSize(1.0f);
+			break;
+	}
 
 	// Calculate  movement
 	const FVector Movement = MoveDirection * MoveSpeed * DeltaSeconds;
@@ -103,6 +127,43 @@ void ALabyBotPawn::Tick(float DeltaSeconds)
 
 	// Try and fire a shot
 	FireShot(FireDirection);
+}
+
+void ALabyBotPawn::Raycast() {
+	FHitResult OutHit;
+
+	FVector Start = ShipMeshComponent->GetComponentLocation();
+	FVector ForwardVector = ShipMeshComponent->GetForwardVector();
+	FVector End = Start + (ForwardVector * 100.f);
+
+	FCollisionQueryParams CollisionParms;
+	CollisionParms.AddIgnoredActor(this->GetOwner());
+
+	//DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1, 0, 1);
+
+	bool isHit = GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility, CollisionParms);
+
+	UE_LOG(LogTemp, Warning, TEXT("RAYCAST"), TEXT(" RAYCAST2"));
+	if (isHit) {
+		//OutHit.GetActor()->Destroy();
+		switch (currentDirectionPawn) {
+		case Up:
+			currentDirectionPawn = Right;
+			break;
+		case Down:
+			currentDirectionPawn = Left;
+			break;
+		case Right:
+			currentDirectionPawn = Down;
+			break;
+		case Left:
+			currentDirectionPawn = Up;
+			break;
+		default:
+			break;
+		}
+	}
+
 }
 
 void ALabyBotPawn::FireShot(FVector FireDirection)

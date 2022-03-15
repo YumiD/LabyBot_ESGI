@@ -50,6 +50,8 @@ public:
 	/* Fire a shot in the specified direction */
 	void FireShot(FVector FireDirection);
 
+	void Raycast();
+
 	/* Handler for the fire timer expiry */
 	void ShotTimerExpired();
 
