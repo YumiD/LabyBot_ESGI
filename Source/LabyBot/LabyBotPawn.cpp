@@ -134,7 +134,7 @@ void ALabyBotPawn::Raycast() {
 
 	FVector Start = ShipMeshComponent->GetComponentLocation();
 	FVector ForwardVector = ShipMeshComponent->GetForwardVector();
-	FVector EndForward = Start + (ForwardVector * 150.f);
+	FVector EndForward = Start + (ForwardVector * 200.f);
 	FVector LeftVector = ShipMeshComponent->GetRightVector();
 	FVector EndLeft = Start + (LeftVector * -250.f);
 	FVector RightVector = ShipMeshComponent->GetRightVector();
