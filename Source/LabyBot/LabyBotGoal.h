@@ -25,5 +25,6 @@ public:
 	UFUNCTION()
 		void Event(class AActor* overlappedActor, class AActor* otherActor);
 
-	UPROPERTY(EditAnywhere)
+	//UPROPERTY(EditAnywhere)
+	//	AActor* Ball;
 };
