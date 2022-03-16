@@ -23,6 +23,18 @@ class ALabyBotPawn : public APawn
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
 
+	/* Materials */
+	UPROPERTY(EditAnywhere, Category = "Materials")
+		UMaterialInterface* MaterialOne;
+	UPROPERTY(EditAnywhere, Category = "Materials")
+		UMaterialInterface* MaterialTwo;
+	UPROPERTY(EditAnywhere, Category = "Materials")
+		UMaterialInterface* MaterialThree;
+	UPROPERTY(EditAnywhere, Category = "Materials")
+		UMaterialInterface* MaterialFour;
+	UPROPERTY(EditAnywhere, Category = "Materials")
+		UMaterialInterface* MaterialFive;
+
 public:
 	ALabyBotPawn();
 
@@ -36,6 +48,8 @@ public:
 	// End Actor Interface
 
 	void Raycast();
+
+	void UpdateMaterial();
 
 	void InitBattery();
 	void UpdateBattery();
@@ -53,6 +67,7 @@ private:
 	/* Handle for Battery */
 	FTimerHandle TimeHandle_Battery;
 	int32 BatteryLeft;
+
 
 public:
 	/** Returns ShipMeshComponent subobject **/

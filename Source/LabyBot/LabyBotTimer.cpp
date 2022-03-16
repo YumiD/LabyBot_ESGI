@@ -53,7 +53,7 @@ void ALabyBotTimer::TimerFunction() {
 		if (_CallTrackerPrint)
 			PrintString("Finished Looping");
 		GetWorldTimerManager().ClearTimer(_TimeHandle);
-		this->Destroy();
+		//this->Destroy();
 	}
 	else {
 		if(_CallTrackerPrint)

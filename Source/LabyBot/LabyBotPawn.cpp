@@ -34,6 +34,13 @@ ALabyBotPawn::ALabyBotPawn()
 	ShipMeshComponent->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
 	ShipMeshComponent->SetStaticMesh(ShipMesh.Object);
 
+	//Set Materials
+	MaterialOne = CreateDefaultSubobject<UMaterialInterface>("MaterialOne");
+	MaterialTwo = CreateDefaultSubobject<UMaterialInterface>("MaterialTwo");
+	MaterialThree = CreateDefaultSubobject<UMaterialInterface>("MaterialThree");
+	MaterialFour = CreateDefaultSubobject<UMaterialInterface>("MaterialFour");
+	MaterialFive = CreateDefaultSubobject<UMaterialInterface>("MaterialFive");
+
 	// Create a camera boom...
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
@@ -77,6 +84,8 @@ void ALabyBotPawn::BeginPlay()
 void ALabyBotPawn::Tick(float DeltaSeconds)
 {
 	Raycast();
+
+	UpdateMaterial();
 
 	// Find movement direction
 	const float ForwardValue = GetInputAxisValue(MoveForwardBinding);
@@ -203,7 +212,32 @@ void ALabyBotPawn::InitBattery() {
 void ALabyBotPawn::UpdateBattery() {
 	BatteryLeft--;
 
-	if (BatteryLeft)
+	if (BatteryLeft>0)
 		PrintString(FString::Printf(TEXT("Battery Left: %d"), BatteryLeft));
+	else {
+		PrintString(FString::Printf(TEXT("No More Battery")));
+		GetWorldTimerManager().ClearTimer(TimeHandle_Battery);
+	}
+
 }
 
+void ALabyBotPawn::UpdateMaterial() {
+	if (BatteryLeft > 7) {
+		ShipMeshComponent->SetMaterial(0, MaterialOne);
+		return;
+	}
+	if (BatteryLeft > 5) {
+		ShipMeshComponent->SetMaterial(0, MaterialTwo);
+		return;
+	}
+	if (BatteryLeft > 2) {
+		ShipMeshComponent->SetMaterial(0, MaterialThree);
+		return;
+	}
+	if (BatteryLeft > 0) {
+		ShipMeshComponent->SetMaterial(0, MaterialFour);
+		return;
+	}
+	ShipMeshComponent->SetMaterial(0, MaterialFive);
+	
+}
