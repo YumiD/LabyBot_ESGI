@@ -2,6 +2,7 @@
 
 #include "LabyBotPawn.h"
 #include "LabyBotProjectile.h"
+#include "LabyBotTimer.h"
 #include "TimerManager.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Camera/CameraComponent.h"
@@ -13,6 +14,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundBase.h"
 #include "DrawDebugHelpers.h"
+
+#define PrintString(String) GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::White, String)
 
 const FName ALabyBotPawn::MoveForwardBinding("MoveForward");
 const FName ALabyBotPawn::MoveRightBinding("MoveRight");
@@ -56,6 +59,7 @@ ALabyBotPawn::ALabyBotPawn()
 	bCanFire = true;
 
 	currentDirectionPawn = Up;
+	BatteryLeft = 10;
 }
 
 void ALabyBotPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -67,6 +71,15 @@ void ALabyBotPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAxis(MoveRightBinding);
 	PlayerInputComponent->BindAxis(FireForwardBinding);
 	PlayerInputComponent->BindAxis(FireRightBinding);
+}
+
+// Called when the game starts or when spawned
+void ALabyBotPawn::BeginPlay()
+{
+	Super::BeginPlay();
+
+	InitBattery();
+
 }
 
 void ALabyBotPawn::Tick(float DeltaSeconds)
@@ -121,12 +134,12 @@ void ALabyBotPawn::Tick(float DeltaSeconds)
 	}
 	
 	// Create fire direction vector
-	const float FireForwardValue = GetInputAxisValue(FireForwardBinding);
-	const float FireRightValue = GetInputAxisValue(FireRightBinding);
-	const FVector FireDirection = FVector(FireForwardValue, FireRightValue, 0.f);
+	//const float FireForwardValue = GetInputAxisValue(FireForwardBinding);
+	//const float FireRightValue = GetInputAxisValue(FireRightBinding);
+	//const FVector FireDirection = FVector(FireForwardValue, FireRightValue, 0.f);
 
 	// Try and fire a shot
-	FireShot(FireDirection);
+	//FireShot(FireDirection);
 }
 
 void ALabyBotPawn::Raycast() {
@@ -230,6 +243,17 @@ void ALabyBotPawn::FireShot(FVector FireDirection)
 			bCanFire = false;
 		}
 	}
+}
+
+void ALabyBotPawn::InitBattery() {
+	GetWorldTimerManager().SetTimer(TimeHandle_Battery, this, &ALabyBotPawn::UpdateBattery, 3.0f, true, 1.0f);
+}
+
+void ALabyBotPawn::UpdateBattery() {
+	BatteryLeft--;
+
+	if (BatteryLeft)
+		PrintString(FString::Printf(TEXT("Battery Left: %d"), BatteryLeft));
 }
 
 void ALabyBotPawn::ShotTimerExpired()

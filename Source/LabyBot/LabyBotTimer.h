@@ -15,21 +15,28 @@ public:
 	// Sets default values for this actor's properties
 	ALabyBotTimer();
 
+	ALabyBotTimer(int32 calltracker, float period, bool print);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	// Max Timer Loops
-	int32 CallTracker = 3;
+	int32 _CallTracker;
+
+	// How often to call timer
+	float _CallTrackerPeriod;
+
+	// Do we print how many left?
+	bool _CallTrackerPrint;
 
 public:	
-	// Called every frame
-	//virtual void Tick(float DeltaTime) override;
 
 	// Timer Function
 	void TimerFunction();
 
 	// Timer Handle (For Control)
-	FTimerHandle TimeHandle;
+	FTimerHandle _TimeHandle;
 
+	int32 getCallTracker();
 };

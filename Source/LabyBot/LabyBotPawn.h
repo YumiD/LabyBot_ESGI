@@ -52,6 +52,9 @@ public:
 
 	void Raycast();
 
+	void InitBattery();
+	void UpdateBattery();
+
 	/* Handler for the fire timer expiry */
 	void ShotTimerExpired();
 
@@ -63,11 +66,17 @@ public:
 
 private:
 
+	virtual void BeginPlay() override;
+
 	/* Flag to control firing  */
 	uint32 bCanFire : 1;
 
 	/** Handle for efficient management of ShotTimerExpired timer */
 	FTimerHandle TimerHandle_ShotTimerExpired;
+
+	/* Handle for Battery */
+	FTimerHandle TimeHandle_Battery;
+	int32 BatteryLeft;
 
 public:
 	/** Returns ShipMeshComponent subobject **/
