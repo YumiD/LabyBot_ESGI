@@ -26,37 +26,19 @@ class ALabyBotPawn : public APawn
 public:
 	ALabyBotPawn();
 
-	/** Offset from the ships location to spawn projectiles */
-	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite )
-	FVector GunOffset;
-	
-	/* How fast the weapon will fire */
-	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
-	float FireRate;
-
 	/* The speed our ship moves around the level */
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 	float MoveSpeed;
-
-	/** Sound to play each time we fire */
-	UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)
-	class USoundBase* FireSound;
 
 	// Begin Actor Interface
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 	// End Actor Interface
 
-	/* Fire a shot in the specified direction */
-	void FireShot(FVector FireDirection);
-
 	void Raycast();
 
 	void InitBattery();
 	void UpdateBattery();
-
-	/* Handler for the fire timer expiry */
-	void ShotTimerExpired();
 
 	// Static names for axis bindings
 	static const FName MoveForwardBinding;
@@ -67,12 +49,6 @@ public:
 private:
 
 	virtual void BeginPlay() override;
-
-	/* Flag to control firing  */
-	uint32 bCanFire : 1;
-
-	/** Handle for efficient management of ShotTimerExpired timer */
-	FTimerHandle TimerHandle_ShotTimerExpired;
 
 	/* Handle for Battery */
 	FTimerHandle TimeHandle_Battery;
