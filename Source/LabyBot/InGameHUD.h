@@ -38,7 +38,7 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 		UProgressBar* EnergyBar;
-	void UpdateTextBlock(FString Time) const;
+	void UpdateHUD(FString Time) const;
 	int32 CallTracker = 60;
 
 	virtual void NativeConstruct() override;

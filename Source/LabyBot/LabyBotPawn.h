@@ -21,9 +21,9 @@ class ALabyBotPawn : public APawn
 {
 	GENERATED_BODY()
 
-	/* The mesh component */
-	UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class UStaticMeshComponent* ShipMeshComponent;
+		/* The mesh component */
+		UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class UStaticMeshComponent* ShipMeshComponent;
 
 	/** The camera */
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
@@ -53,8 +53,9 @@ public:
 		float MoveSpeed;
 
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
-		bool Started = false;
+		int32 MaxBattery = 10;
 
+	bool Started = false;
 	// Begin Actor Interface
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
@@ -70,6 +71,7 @@ public:
 	void SetDirectionPawn(DirectionPawn direction);
 
 	void Goal();
+	int32 GetCurrentBattery();
 
 	// Static names for axis bindings
 	static const FName MoveForwardBinding;

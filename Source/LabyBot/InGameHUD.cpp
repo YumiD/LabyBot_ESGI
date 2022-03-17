@@ -17,14 +17,15 @@ UInGameHUD::UInGameHUD(const FObjectInitializer &ObjectInitializer) : Super(Obje
 
 void UInGameHUD::StartGame()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Start!"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Start!"));
 	PlayerPawn->Started = true;
 	Timer->StartTimer();
 }
 
-void UInGameHUD::UpdateTextBlock(FString Time) const
+void UInGameHUD::UpdateHUD(FString Time) const
 {
 	TimeText->SetText(FText::AsCultureInvariant(Time));
+	EnergyBar->SetPercent(static_cast<float>(PlayerPawn->GetCurrentBattery()) / PlayerPawn->MaxBattery);
 }
 
 void UInGameHUD::NativeConstruct()
@@ -36,4 +37,5 @@ void UInGameHUD::NativeConstruct()
 	Timer = GetWorld()->SpawnActor<ALabyBotTimer>(Location, Rotation, SpawnInfo);
 	Timer->InitTimer(*this);
 	TimeText->SetText(FText::AsCultureInvariant(FString::FromInt(Timer->GetMaxTime())));
+	EnergyBar->SetPercent(100);
 }

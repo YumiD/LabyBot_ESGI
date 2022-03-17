@@ -54,7 +54,7 @@ ALabyBotPawn::ALabyBotPawn()
 	MoveSpeed = 500.0f;
 
 	currentDirectionPawn = DirectionPawn::Up;
-	BatteryLeft = 10;
+	BatteryLeft = MaxBattery;
 }
 
 void ALabyBotPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -245,4 +245,9 @@ void ALabyBotPawn::SetDirectionPawn(DirectionPawn direction) {
 
 void ALabyBotPawn::Goal() {
 	PrintString(FString::Printf(TEXT("GOAAAAAAAAAAAAAL")));
+}
+
+int32 ALabyBotPawn::GetCurrentBattery()
+{
+	return BatteryLeft;
 }

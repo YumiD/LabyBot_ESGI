@@ -36,11 +36,11 @@ void ALabyBotTimer::TimerFunction() {
 	if (CallTracker == 0) {
 		PrintString("Finished Looping");
 		GetWorldTimerManager().ClearTimer(TimeHandle);
-		Timer->UpdateTextBlock(FString::FromInt(CallTracker));
+		Timer->UpdateHUD(FString::FromInt(CallTracker));
 	}
 	else {
 		PrintString("Timer Called");
-		Timer->UpdateTextBlock(FString::FromInt(CallTracker));
+		Timer->UpdateHUD(FString::FromInt(CallTracker));
 	}
 
 	// Print the number of loops the tracker has remaining
