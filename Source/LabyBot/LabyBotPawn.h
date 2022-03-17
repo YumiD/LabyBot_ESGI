@@ -6,6 +6,17 @@
 #include "GameFramework/Character.h"
 #include "LabyBotPawn.generated.h"
 
+UENUM(BlueprintType)
+enum class DirectionPawn : uint8
+{
+	None UMETA(DisplayName = "None"),
+	Left UMETA(DisplayName = "Left"),
+	Up UMETA(DisplayName = "Up"),
+	Right UMETA(DisplayName = "Right"),
+	Down UMETA(DisplayName = "Down")
+};
+
+
 UCLASS(Blueprintable)
 class ALabyBotPawn : public APawn
 {
@@ -54,6 +65,10 @@ public:
 	void InitBattery();
 	void UpdateBattery();
 
+	void SetDirectionPawn(DirectionPawn direction);
+
+	void Goal();
+
 	// Static names for axis bindings
 	static const FName MoveForwardBinding;
 	static const FName MoveRightBinding;
@@ -67,6 +82,8 @@ private:
 	/* Handle for Battery */
 	FTimerHandle TimeHandle_Battery;
 	int32 BatteryLeft;
+
+	DirectionPawn currentDirectionPawn;
 
 
 public:

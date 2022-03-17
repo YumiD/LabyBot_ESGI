@@ -13,8 +13,13 @@ void ALabyBotGoal::BeginPlay()
 }
 
 void ALabyBotGoal::Event(class AActor* overlappedActor, class AActor* otherActor) {
-	if (otherActor && otherActor != this) {
+	/*if (otherActor && otherActor != this) {
 		UE_LOG(LogTemp, Warning, TEXT("GOAL!!!"));
+	}*/
+	ALabyBotPawn* pawn = Cast<ALabyBotPawn>(otherActor);
+
+	if (pawn != NULL) {
+		pawn->Goal();
 	}
 }
 

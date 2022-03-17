@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "LabyBotPawn.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/StaticMeshComponent.h"
@@ -25,6 +26,7 @@ public:
 	UFUNCTION()
 		void Event(class AActor* overlappedActor, class AActor* otherActor);
 
-	//UPROPERTY(EditAnywhere)
-	//	AActor* Ball;
+	//TODO Mettre des particules
+	UPROPERTY(EditAnywhere)
+		AActor* Ball;
 };

@@ -22,9 +22,6 @@ const FName ALabyBotPawn::MoveRightBinding("MoveRight");
 const FName ALabyBotPawn::FireForwardBinding("FireForward");
 const FName ALabyBotPawn::FireRightBinding("FireRight");
 
-enum DirectionPawn { Up, Down, Right, Left };
-DirectionPawn currentDirectionPawn;
-
 ALabyBotPawn::ALabyBotPawn()
 {	
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> ShipMesh(TEXT("/Game/TwinStick/Meshes/TwinStickUFO.TwinStickUFO"));
@@ -57,7 +54,7 @@ ALabyBotPawn::ALabyBotPawn()
 	// Movement
 	MoveSpeed = 500.0f;
 
-	currentDirectionPawn = Up;
+	currentDirectionPawn = DirectionPawn::Up;
 	BatteryLeft = 10;
 }
 
@@ -99,22 +96,24 @@ void ALabyBotPawn::Tick(float DeltaSeconds)
 	FVector MoveDirection;
 
 	switch (currentDirectionPawn) {
-		case Up:
+		case DirectionPawn::Up:
 			MoveDirection = FVector(1.f, 0.f, 0.f).GetClampedToMaxSize(1.0f);
 			break;
-		case Down:
+		case DirectionPawn::Down:
 			MoveDirection = FVector(-1.f, 0.f, 0.f).GetClampedToMaxSize(1.0f);
 			break;
-		case Right:
+		case DirectionPawn::Right:
 			MoveDirection = FVector(0.f, 1.f, 0.f).GetClampedToMaxSize(1.0f);
 			break;
-		case Left:
+		case DirectionPawn::Left:
 			MoveDirection = FVector(0.f, -1.f, 0.f).GetClampedToMaxSize(1.0f);
 			break;
 		default:
 			MoveDirection = FVector(1.f, 0.f, 0.f).GetClampedToMaxSize(1.0f);
 			break;
 	}
+	if(BatteryLeft<=0)
+		MoveDirection = FVector(0.f, 0.f, 0.f).GetClampedToMaxSize(1.0f);
 
 	// Calculate  movement
 	const FVector Movement = MoveDirection * MoveSpeed * DeltaSeconds;
@@ -162,40 +161,40 @@ void ALabyBotPawn::Raycast() {
 	if (isHitForward) {
 		//OutHit.GetActor()->Destroy();
 		switch (currentDirectionPawn) {
-		case Up:
-			currentDirectionPawn = Left;
+		case DirectionPawn::Up:
+			currentDirectionPawn = DirectionPawn::Left;
 			if (isHitLeft) {
-				currentDirectionPawn = Right;
+				currentDirectionPawn = DirectionPawn::Right;
 			}
 			if (isHitRight) {
-				currentDirectionPawn = Down;
+				currentDirectionPawn = DirectionPawn::Down;
 			}
 			break;
-		case Down:
-			currentDirectionPawn = Right;
+		case DirectionPawn::Down:
+			currentDirectionPawn = DirectionPawn::Right;
 			if (isHitLeft) {
-				currentDirectionPawn = Left;
+				currentDirectionPawn = DirectionPawn::Left;
 			}
 			if (isHitRight) {
-				currentDirectionPawn = Up;
+				currentDirectionPawn = DirectionPawn::Up;
 			}
 			break;
-		case Right:
-			currentDirectionPawn = Up;
+		case DirectionPawn::Right:
+			currentDirectionPawn = DirectionPawn::Up;
 			if (isHitLeft) {
-				currentDirectionPawn = Down;
+				currentDirectionPawn = DirectionPawn::Down;
 			}
 			if (isHitRight) {
-				currentDirectionPawn = Left;
+				currentDirectionPawn = DirectionPawn::Left;
 			}
 			break;
-		case Left:
-			currentDirectionPawn = Down;
+		case DirectionPawn::Left:
+			currentDirectionPawn = DirectionPawn::Down;
 			if (isHitLeft) {
-				currentDirectionPawn = Up;
+				currentDirectionPawn = DirectionPawn::Up;
 			}
 			if (isHitRight) {
-				currentDirectionPawn = Right;
+				currentDirectionPawn = DirectionPawn::Right;
 			}
 			break;
 		default:
@@ -240,4 +239,12 @@ void ALabyBotPawn::UpdateMaterial() {
 	}
 	ShipMeshComponent->SetMaterial(0, MaterialFive);
 	
+}
+
+void ALabyBotPawn::SetDirectionPawn(DirectionPawn direction){
+	currentDirectionPawn = direction;
+}
+
+void ALabyBotPawn::Goal() {
+	PrintString(FString::Printf(TEXT("GOAAAAAAAAAAAAAL")));
 }
