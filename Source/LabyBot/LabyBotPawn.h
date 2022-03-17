@@ -22,17 +22,17 @@ class ALabyBotPawn : public APawn
 {
 	GENERATED_BODY()
 
-	/* The mesh component */
-	UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class UStaticMeshComponent* ShipMeshComponent;
+		/* The mesh component */
+		UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class UStaticMeshComponent* ShipMeshComponent;
 
 	/** The camera */
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* CameraComponent;
+		class UCameraComponent* CameraComponent;
 
 	/** Camera boom positioning the camera above the character */
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* CameraBoom;
+		class USpringArmComponent* CameraBoom;
 
 	/* Materials */
 	UPROPERTY(EditAnywhere, Category = "Materials")
@@ -51,7 +51,10 @@ public:
 
 	/* The speed our ship moves around the level */
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
-	float MoveSpeed;
+		float MoveSpeed;
+
+	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
+		bool Started = false;
 
 	// Begin Actor Interface
 	virtual void Tick(float DeltaSeconds) override;

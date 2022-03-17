@@ -3,40 +3,32 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "InGameHUD.h"
 #include "GameFramework/Actor.h"
 #include "LabyBotTimer.generated.h"
+
+class UInGameHUD;
 
 UCLASS()
 class LABYBOT_API ALabyBotTimer : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	ALabyBotTimer();
-
-	ALabyBotTimer(int32 calltracker, float period, bool print);
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
+	void InitTimer(UInGameHUD& timer);
+	void StartTimer();
+	int32 GetMaxTime();
+private:
 	// Max Timer Loops
-	int32 _CallTracker;
+	int32 CallTracker = 0;
+	UInGameHUD* Timer;
 
-	// How often to call timer
-	float _CallTrackerPeriod;
-
-	// Do we print how many left?
-	bool _CallTrackerPrint;
-
-public:	
-
+public:
 	// Timer Function
 	void TimerFunction();
 
 	// Timer Handle (For Control)
-	FTimerHandle _TimeHandle;
-
-	int32 getCallTracker();
+	FTimerHandle TimeHandle;
 };
