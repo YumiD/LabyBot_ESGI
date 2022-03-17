@@ -8,4 +8,3 @@ ALabyBotGameMode::ALabyBotGameMode()
 	// set default pawn class to our character class
 	DefaultPawnClass = ALabyBotPawn::StaticClass();
 }
-
