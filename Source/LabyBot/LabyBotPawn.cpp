@@ -80,6 +80,7 @@ void ALabyBotPawn::BeginPlay()
 
 void ALabyBotPawn::Tick(float DeltaSeconds)
 {
+	if (!Started) return;
 	Raycast();
 
 	UpdateMaterial();
