@@ -6,14 +6,24 @@
 #include "GameFramework/Character.h"
 #include "LabyBotPawn.generated.h"
 
+UENUM(BlueprintType)
+enum class DirectionPawn : uint8
+{
+	None UMETA(DisplayName = "None"),
+	Left UMETA(DisplayName = "Left"),
+	Up UMETA(DisplayName = "Up"),
+	Right UMETA(DisplayName = "Right"),
+	Down UMETA(DisplayName = "Down")
+};
+
 UCLASS(Blueprintable)
 class ALabyBotPawn : public APawn
 {
 	GENERATED_BODY()
 
-		/* The mesh component */
-		UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		class UStaticMeshComponent* ShipMeshComponent;
+	/* The mesh component */
+	UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class UStaticMeshComponent* ShipMeshComponent;
 
 	/** The camera */
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
@@ -22,6 +32,18 @@ class ALabyBotPawn : public APawn
 	/** Camera boom positioning the camera above the character */
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		class USpringArmComponent* CameraBoom;
+
+	/* Materials */
+	UPROPERTY(EditAnywhere, Category = "Materials")
+		UMaterialInterface* MaterialOne;
+	UPROPERTY(EditAnywhere, Category = "Materials")
+		UMaterialInterface* MaterialTwo;
+	UPROPERTY(EditAnywhere, Category = "Materials")
+		UMaterialInterface* MaterialThree;
+	UPROPERTY(EditAnywhere, Category = "Materials")
+		UMaterialInterface* MaterialFour;
+	UPROPERTY(EditAnywhere, Category = "Materials")
+		UMaterialInterface* MaterialFive;
 
 public:
 	ALabyBotPawn();
@@ -40,11 +62,30 @@ public:
 
 	void Raycast();
 
+	void UpdateMaterial();
+
+	void InitBattery();
+	void UpdateBattery();
+
+	void SetDirectionPawn(DirectionPawn direction);
+
+	void Goal();
+
 	// Static names for axis bindings
 	static const FName MoveForwardBinding;
 	static const FName MoveRightBinding;
 	static const FName FireForwardBinding;
 	static const FName FireRightBinding;
+
+private:
+
+	virtual void BeginPlay() override;
+
+	/* Handle for Battery */
+	FTimerHandle TimeHandle_Battery;
+	int32 BatteryLeft;
+
+	DirectionPawn currentDirectionPawn;
 
 public:
 	/** Returns ShipMeshComponent subobject **/
