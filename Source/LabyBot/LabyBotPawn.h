@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "LabyBotPawn.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnd, bool, isVictory);
+
 UENUM(BlueprintType)
 enum class DirectionPawn : uint8
 {
@@ -72,6 +74,9 @@ public:
 
 	void Goal();
 	int32 GetCurrentBattery();
+
+	UPROPERTY(BlueprintAssignable, Category = "Event")
+		FOnEnd PlayerEnd;
 
 	// Static names for axis bindings
 	static const FName MoveForwardBinding;
