@@ -105,7 +105,6 @@ void ALabyBotPawn::Tick(float DeltaSeconds)
 	}
 	if (BatteryLeft <= 0) {
 		MoveDirection = FVector(0.f, 0.f, 0.f).GetClampedToMaxSize(1.0f);
-		PlayerEnd.Broadcast(false);
 	}
 
 	// Calculate  movement
@@ -141,9 +140,9 @@ void ALabyBotPawn::Raycast() {
 	FCollisionQueryParams CollisionParms;
 	CollisionParms.AddIgnoredActor(this->GetOwner());
 
-	//DrawDebugLine(GetWorld(), Start, EndForward, FColor::Green, false, 1, 0, 1);
-	//DrawDebugLine(GetWorld(), Start, EndLeft, FColor::Blue, false, 1, 0, 1);
-	//DrawDebugLine(GetWorld(), Start, EndRight, FColor::Red, false, 1, 0, 1);
+	DrawDebugLine(GetWorld(), Start, EndForward, FColor::Green, false, 1, 0, 1);
+	DrawDebugLine(GetWorld(), Start, EndLeft, FColor::Blue, false, 1, 0, 1);
+	DrawDebugLine(GetWorld(), Start, EndRight, FColor::Red, false, 1, 0, 1);
 
 	bool isHitForward = GetWorld()->LineTraceSingleByChannel(OutHit, Start, EndForward, ECC_Visibility, CollisionParms);
 	bool isHitLeft = GetWorld()->LineTraceSingleByChannel(OutHit, Start, EndLeft, ECC_Visibility, CollisionParms);
@@ -207,6 +206,7 @@ void ALabyBotPawn::UpdateBattery() {
 	if (BatteryLeft <= 0){
 		//PrintString(FString::Printf(TEXT("No More Battery")));
 		GetWorldTimerManager().ClearTimer(TimeHandle_Battery);
+		PlayerEnd.Broadcast(false);
 	}
 
 }

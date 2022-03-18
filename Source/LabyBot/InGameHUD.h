@@ -52,15 +52,12 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 		UImage* ImageLevel;
-
-	UPROPERTY(meta = (BindWidget))
-		UButton* Crossroad1;
-
-	UPROPERTY(meta = (BindWidget))
-		UTextBlock* Crossroad1Text;
+	UPROPERTY(EditAnywhere, Category = "HUD")
+		int32 MaxJokers = 3;
 
 	UPROPERTY(EditAnywhere, Category = "HUD")
 		TSubclassOf<class UEndScreenWidget> EndScreenClass;
+
 
 	UFUNCTION()
 		void OnEndScreen(bool isVictory);
@@ -68,14 +65,19 @@ public:
 	void UpdateHUD(FString Time) const;
 	int32 CallTracker = 60;
 	TArray<ALabyBotCrossroad*> crossRoads;
+	bool VerifyJoker(FString direction);
 
 	virtual void NativeConstruct() override;
 
 private:
 	ALabyBotTimer* Timer;
 	ALabyBotPawn* PlayerPawn;
-	ALabyBotCrossroad* Crossroad1Object;
 	DirectionPawn Crossroad1Direction = DirectionPawn::None;
 	UEndScreenWidget* EndScreen;
+	TArray<UButton*> CrossroadsButtons;
+	TArray<UTextBlock*> CrossroadsText;
+
 	bool isOver = false;
+	void GetAllButtons();
+	void GetAllText();
 };

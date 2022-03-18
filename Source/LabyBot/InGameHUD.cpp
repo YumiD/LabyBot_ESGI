@@ -5,6 +5,7 @@
 #include <string.h>
 #include "Kismet/GameplayStatics.h"
 #include "Math/Vector.h"
+#include <string>
 
 class ALabyBotTimer;
 #define PrintString(String) GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::White, String)
@@ -16,16 +17,11 @@ UInGameHUD::UInGameHUD(const FObjectInitializer &ObjectInitializer) : Super(Obje
 	for (TObjectIterator<ALabyBotCrossroad> It; It; ++It)
 	{
 		ALabyBotCrossroad* crossRoad = *It;
-		//crossRoad->GetFullName();
-		//PrintString(FString::Printf(TEXT("name: %s"), crossRoad->GetFullName()));
-		//PrintString(crossRoad->GetFullName());
 		if (crossRoad->GetWorld() == world) {
 			crossRoads.Add(crossRoad);
 		}
 	}
 	crossRoads.Sort();
-
-	//PrintString(FString::Printf(TEXT("amount of crossRoads: %d"), crossRoads.Num()));
 }
 
 void UInGameHUD::StartGame()
@@ -40,15 +36,9 @@ void UInGameHUD::StartGame()
 	PlayerPawn->InitBattery();
 	Timer->StartTimer();
 	ImageLevel->SetVisibility(ESlateVisibility::Hidden);
-	Crossroad1->SetVisibility(ESlateVisibility::Hidden);
-
-	/*crossRoads[0]->UpdateDirection(DirectionPawn::Left);
-
-	crossRoads[1]->UpdateDirection(DirectionPawn::Up);
-
-	crossRoads[2]->UpdateDirection(DirectionPawn::Down);
-
-	crossRoads[3]->UpdateDirection(DirectionPawn::Right);*/
+	for (int i = 0; i < CrossroadsButtons.Num();i++) {
+		CrossroadsButtons[i]->SetVisibility(ESlateVisibility::Hidden);
+	}
 }
 
 void UInGameHUD::OnEndScreen(bool isVictory)
@@ -56,7 +46,7 @@ void UInGameHUD::OnEndScreen(bool isVictory)
 	if (EndScreen == nullptr)
 		return;
 	StartButton->SetVisibility(ESlateVisibility::Visible);
-	EndScreen->AddToViewport(); // Add it to the viewport so the Construct() method in the UUserWidget:: is run.
+	EndScreen->AddToViewport();
 	EndScreen->UpdateEndText(isVictory);
 	isOver = true;
 }
@@ -69,34 +59,51 @@ void UInGameHUD::UpdateHUD(FString Time) const
 
 void UInGameHUD::UpdateCrossroad(int i)
 {
+	if (!VerifyJoker(CrossroadsText[i]->GetText().ToString())) return;
 	switch (Crossroad1Direction) {
 		case DirectionPawn::None:
-			Crossroad1Text->SetText(FText::AsCultureInvariant("U"));
+			CrossroadsText[i]->SetText(FText::AsCultureInvariant("U"));
 			Crossroad1Direction = DirectionPawn::Up;
 			crossRoads[i]->UpdateDirection(DirectionPawn::Up);
 			break;
 		case DirectionPawn::Up:
-			Crossroad1Text->SetText(FText::AsCultureInvariant("R"));
+			CrossroadsText[i]->SetText(FText::AsCultureInvariant("R"));
 			Crossroad1Direction = DirectionPawn::Right;
 			crossRoads[i]->UpdateDirection(DirectionPawn::Right);
 			break;
 		case DirectionPawn::Right:
-			Crossroad1Text->SetText(FText::AsCultureInvariant("D"));
+			CrossroadsText[i]->SetText(FText::AsCultureInvariant("D"));
 			Crossroad1Direction = DirectionPawn::Down;
 			crossRoads[i]->UpdateDirection(DirectionPawn::Down);
 			break;
 		case DirectionPawn::Down:
-			Crossroad1Text->SetText(FText::AsCultureInvariant("L"));
+			CrossroadsText[i]->SetText(FText::AsCultureInvariant("L"));
 			Crossroad1Direction = DirectionPawn::Left;
 			crossRoads[i]->UpdateDirection(DirectionPawn::Left);
 			break;
 		case DirectionPawn::Left:
-			Crossroad1Text->SetText(FText::AsCultureInvariant(""));
+			CrossroadsText[i]->SetText(FText::AsCultureInvariant(""));
 			Crossroad1Direction = DirectionPawn::None;
 			break;
 		default:
 			break;
 	}
+}
+
+bool UInGameHUD::VerifyJoker(FString direction)
+{
+	int count = 0;
+	for (size_t i = 0; i < CrossroadsText.Num(); i++)
+	{
+		if (!CrossroadsText[i]->GetText().ToString().IsEmpty() && !CrossroadsText[i]->GetText().ToString().Contains(direction)) {
+			count++;
+		}
+		if (count >= MaxJokers)
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
 void UInGameHUD::NativeConstruct()
@@ -111,4 +118,44 @@ void UInGameHUD::NativeConstruct()
 	EnergyBar->SetPercent(100);
 	PlayerPawn->PlayerEnd.AddDynamic(this, &UInGameHUD::OnEndScreen);
 	EndScreen = CreateWidget<UEndScreenWidget>(GetWorld(), EndScreenClass);
+	GetAllButtons();
+	GetAllText();
+}
+
+void UInGameHUD::GetAllButtons()
+{
+	const UWorld* world = GetWorld();
+
+	FString cross = "Crossroad";
+	for (TObjectIterator<UButton> Itr; Itr; ++Itr)
+	{
+		UButton* liveButton = *Itr;
+		if (liveButton->GetWorld() != world)
+		{
+			continue;
+		}
+		if (liveButton->GetFName().ToString().Contains(cross))
+		{
+			CrossroadsButtons.Add(liveButton);
+		}
+	}
+}
+
+void UInGameHUD::GetAllText()
+{
+	const UWorld* world = GetWorld();
+
+	FString cross = "Crossroad";
+	for (TObjectIterator<UTextBlock> Itr; Itr; ++Itr)
+	{
+		UTextBlock* liveText = *Itr;
+		if (liveText->GetWorld() != world)
+		{
+			continue;
+		}
+		if (liveText->GetFName().ToString().Contains(cross))
+		{
+			CrossroadsText.Add(liveText);
+		}
+	}
 }
