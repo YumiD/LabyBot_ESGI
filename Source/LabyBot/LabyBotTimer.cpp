@@ -2,6 +2,7 @@
 
 
 #include "LabyBotTimer.h"
+#include "Kismet/GameplayStatics.h"
 
 #define PrintString(String) GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::White, String)
 
@@ -26,6 +27,16 @@ void ALabyBotTimer::StartTimer()
 int32 ALabyBotTimer::GetMaxTime()
 {
 	return CallTracker;
+}
+
+void ALabyBotTimer::StopTimer(bool isVictory)
+{
+	GetWorldTimerManager().ClearTimer(TimeHandle);
+}
+
+void ALabyBotTimer::BeginPlay()
+{
+	Cast<ALabyBotPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0))->PlayerEnd.AddDynamic(this, &ALabyBotTimer::StopTimer);
 }
 
 void ALabyBotTimer::TimerFunction() {

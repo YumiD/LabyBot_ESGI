@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "LabyBotPawn.h"
 #include "LabyBotTimer.h"
+#include "EndScreenWidget.h"
 #include "LabyBotCrossroad.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
@@ -18,6 +19,7 @@
 class ALabyBotTimer;
 class ALabyBotPawn;
 class ALabyBotCrossroad;
+class UEndScreenWidget;
 
 /**
  *
@@ -43,6 +45,9 @@ public:
 		UButton* StartButton;
 
 	UPROPERTY(meta = (BindWidget))
+		UTextBlock* StartText;
+
+	UPROPERTY(meta = (BindWidget))
 		UProgressBar* EnergyBar;
 
 	UPROPERTY(meta = (BindWidget))
@@ -53,6 +58,12 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 		UTextBlock* Crossroad1Text;
+
+	UPROPERTY(EditAnywhere, Category = "HUD")
+		TSubclassOf<class UEndScreenWidget> EndScreenClass;
+
+	UFUNCTION()
+		void OnEndScreen(bool isVictory);
 
 	void UpdateHUD(FString Time) const;
 	int32 CallTracker = 60;
@@ -65,5 +76,6 @@ private:
 	ALabyBotPawn* PlayerPawn;
 	ALabyBotCrossroad* Crossroad1Object;
 	DirectionPawn Crossroad1Direction = DirectionPawn::None;
-
+	UEndScreenWidget* EndScreen;
+	bool isOver = false;
 };

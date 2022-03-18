@@ -103,8 +103,10 @@ void ALabyBotPawn::Tick(float DeltaSeconds)
 			MoveDirection = FVector(1.f, 0.f, 0.f).GetClampedToMaxSize(1.0f);
 			break;
 	}
-	if (BatteryLeft <= 0)
+	if (BatteryLeft <= 0) {
 		MoveDirection = FVector(0.f, 0.f, 0.f).GetClampedToMaxSize(1.0f);
+		PlayerEnd.Broadcast(false);
+	}
 
 	// Calculate  movement
 	const FVector Movement = MoveDirection * MoveSpeed * DeltaSeconds;
@@ -235,7 +237,9 @@ void ALabyBotPawn::SetDirectionPawn(DirectionPawn direction) {
 }
 
 void ALabyBotPawn::Goal() {
-	PrintString(FString::Printf(TEXT("GOAAAAAAAAAAAAAL")));
+	GetWorldTimerManager().ClearTimer(TimeHandle_Battery);
+	PlayerEnd.Broadcast(true);
+	MoveSpeed = 0.f;
 }
 
 int32 ALabyBotPawn::GetCurrentBattery()

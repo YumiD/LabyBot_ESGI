@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "InGameHUD.h"
 #include "GameFramework/Actor.h"
+#include "Blueprint/UserWidget.h"
 #include "LabyBotTimer.generated.h"
 
 class UInGameHUD;
@@ -20,6 +21,9 @@ public:
 	void InitTimer(UInGameHUD& timer);
 	void StartTimer();
 	int32 GetMaxTime();
+	UFUNCTION()
+		void StopTimer(bool isVictory);
+	virtual void BeginPlay() override;
 private:
 	// Max Timer Loops
 	int32 CallTracker = 0;

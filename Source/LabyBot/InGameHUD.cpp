@@ -11,10 +11,6 @@ class ALabyBotTimer;
 UInGameHUD::UInGameHUD(const FObjectInitializer &ObjectInitializer) : Super(ObjectInitializer)
 {
 	PlayerPawn = Cast<ALabyBotPawn>(UGameplayStatics::GetPlayerPawn(UUserWidget::GetWorld(), 0));
-	//Crossroad1Object = FindObject<ALabyBotCrossroad>(NULL, "LabyBotCrossroad1");
-
-	//Timer = UObject::CreateDefaultSubobject<ALabyBotTimer>(TEXT("ALabyBotTimer"));
-	//SpawnObject(FVector(0,0,0), FRotator(0, 0, 0));	 
 
 	UWorld* world = GetWorld();
 	for (TObjectIterator<ALabyBotCrossroad> It; It; ++It)
@@ -34,8 +30,13 @@ UInGameHUD::UInGameHUD(const FObjectInitializer &ObjectInitializer) : Super(Obje
 
 void UInGameHUD::StartGame()
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Start!"));
+	if (PlayerPawn->Started && isOver)
+	{
+		UGameplayStatics::OpenLevel(this, FName("Level1"));
+	}
 	PlayerPawn->Started = true;
+	StartText->SetText(FText::FromString("Restart"));
+	StartButton->SetVisibility(ESlateVisibility::Hidden);
 	PlayerPawn->InitBattery();
 	Timer->StartTimer();
 	ImageLevel->SetVisibility(ESlateVisibility::Hidden);
@@ -48,6 +49,16 @@ void UInGameHUD::StartGame()
 	crossRoads[2]->UpdateDirection(DirectionPawn::Down);
 
 	crossRoads[3]->UpdateDirection(DirectionPawn::Right);*/
+}
+
+void UInGameHUD::OnEndScreen(bool isVictory)
+{
+	if (EndScreen == nullptr)
+		return;
+	StartButton->SetVisibility(ESlateVisibility::Visible);
+	EndScreen->AddToViewport(); // Add it to the viewport so the Construct() method in the UUserWidget:: is run.
+	EndScreen->UpdateEndText(isVictory);
+	isOver = true;
 }
 
 void UInGameHUD::UpdateHUD(FString Time) const
@@ -98,4 +109,6 @@ void UInGameHUD::NativeConstruct()
 	Timer->InitTimer(*this);
 	TimeText->SetText(FText::AsCultureInvariant(FString::FromInt(Timer->GetMaxTime())));
 	EnergyBar->SetPercent(100);
+	PlayerPawn->PlayerEnd.AddDynamic(this, &UInGameHUD::OnEndScreen);
+	EndScreen = CreateWidget<UEndScreenWidget>(GetWorld(), EndScreenClass);
 }
