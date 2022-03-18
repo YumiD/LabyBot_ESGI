@@ -74,6 +74,7 @@ private:
 	ALabyBotPawn* PlayerPawn;
 	DirectionPawn Crossroad1Direction = DirectionPawn::None;
 	UEndScreenWidget* EndScreen;
+	TArray<DirectionPawn> CrossroadsDirections;
 	TArray<UButton*> CrossroadsButtons;
 	TArray<UTextBlock*> CrossroadsText;
 

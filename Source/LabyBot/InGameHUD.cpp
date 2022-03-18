@@ -9,7 +9,7 @@
 
 class ALabyBotTimer;
 #define PrintString(String) GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::White, String)
-UInGameHUD::UInGameHUD(const FObjectInitializer &ObjectInitializer) : Super(ObjectInitializer)
+UInGameHUD::UInGameHUD(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	PlayerPawn = Cast<ALabyBotPawn>(UGameplayStatics::GetPlayerPawn(UUserWidget::GetWorld(), 0));
 
@@ -36,7 +36,7 @@ void UInGameHUD::StartGame()
 	PlayerPawn->InitBattery();
 	Timer->StartTimer();
 	ImageLevel->SetVisibility(ESlateVisibility::Hidden);
-	for (int i = 0; i < CrossroadsButtons.Num();i++) {
+	for (int i = 0; i < CrossroadsButtons.Num(); i++) {
 		CrossroadsButtons[i]->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
@@ -60,33 +60,33 @@ void UInGameHUD::UpdateHUD(FString Time) const
 void UInGameHUD::UpdateCrossroad(int i)
 {
 	if (!VerifyJoker(CrossroadsText[i]->GetText().ToString())) return;
-	switch (Crossroad1Direction) {
-		case DirectionPawn::None:
-			CrossroadsText[i]->SetText(FText::AsCultureInvariant("U"));
-			Crossroad1Direction = DirectionPawn::Up;
-			crossRoads[i]->UpdateDirection(DirectionPawn::Up);
-			break;
-		case DirectionPawn::Up:
-			CrossroadsText[i]->SetText(FText::AsCultureInvariant("R"));
-			Crossroad1Direction = DirectionPawn::Right;
-			crossRoads[i]->UpdateDirection(DirectionPawn::Right);
-			break;
-		case DirectionPawn::Right:
-			CrossroadsText[i]->SetText(FText::AsCultureInvariant("D"));
-			Crossroad1Direction = DirectionPawn::Down;
-			crossRoads[i]->UpdateDirection(DirectionPawn::Down);
-			break;
-		case DirectionPawn::Down:
-			CrossroadsText[i]->SetText(FText::AsCultureInvariant("L"));
-			Crossroad1Direction = DirectionPawn::Left;
-			crossRoads[i]->UpdateDirection(DirectionPawn::Left);
-			break;
-		case DirectionPawn::Left:
-			CrossroadsText[i]->SetText(FText::AsCultureInvariant(""));
-			Crossroad1Direction = DirectionPawn::None;
-			break;
-		default:
-			break;
+	switch (CrossroadsDirections[i]) {
+	case DirectionPawn::None:
+		CrossroadsText[i]->SetText(FText::AsCultureInvariant("U"));
+		CrossroadsDirections[i] = DirectionPawn::Up;
+		crossRoads[i]->UpdateDirection(DirectionPawn::Up);
+		break;
+	case DirectionPawn::Up:
+		CrossroadsText[i]->SetText(FText::AsCultureInvariant("R"));
+		CrossroadsDirections[i] = DirectionPawn::Right;
+		crossRoads[i]->UpdateDirection(DirectionPawn::Right);
+		break;
+	case DirectionPawn::Right:
+		CrossroadsText[i]->SetText(FText::AsCultureInvariant("D"));
+		CrossroadsDirections[i] = DirectionPawn::Down;
+		crossRoads[i]->UpdateDirection(DirectionPawn::Down);
+		break;
+	case DirectionPawn::Down:
+		CrossroadsText[i]->SetText(FText::AsCultureInvariant("L"));
+		CrossroadsDirections[i] = DirectionPawn::Left;
+		crossRoads[i]->UpdateDirection(DirectionPawn::Left);
+		break;
+	case DirectionPawn::Left:
+		CrossroadsText[i]->SetText(FText::AsCultureInvariant(""));
+		CrossroadsDirections[i] = DirectionPawn::None;
+		break;
+	default:
+		break;
 	}
 }
 
@@ -120,6 +120,9 @@ void UInGameHUD::NativeConstruct()
 	EndScreen = CreateWidget<UEndScreenWidget>(GetWorld(), EndScreenClass);
 	GetAllButtons();
 	GetAllText();
+	for (int i = 0; i < CrossroadsButtons.Num(); i++) {
+		CrossroadsDirections.Add(DirectionPawn::None);
+	}
 }
 
 void UInGameHUD::GetAllButtons()
