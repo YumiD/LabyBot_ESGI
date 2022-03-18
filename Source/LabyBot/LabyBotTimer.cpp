@@ -34,15 +34,12 @@ void ALabyBotTimer::TimerFunction() {
 	
 	// If CallTracker is zero then print A and Clear the Timer to stop it looping. Otherwise print B
 	if (CallTracker == 0) {
-		PrintString("Finished Looping");
+		//PrintString("Finished Looping");
 		GetWorldTimerManager().ClearTimer(TimeHandle);
 		Timer->UpdateHUD(FString::FromInt(CallTracker));
 	}
 	else {
-		PrintString("Timer Called");
+		//PrintString("Timer Called");
 		Timer->UpdateHUD(FString::FromInt(CallTracker));
 	}
-
-	// Print the number of loops the tracker has remaining
-	PrintString(FString::Printf(TEXT("Calls Remaining: %d"), CallTracker));
 }

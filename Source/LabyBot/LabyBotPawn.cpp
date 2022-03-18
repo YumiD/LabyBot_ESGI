@@ -70,6 +70,7 @@ void ALabyBotPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputC
 void ALabyBotPawn::Tick(float DeltaSeconds)
 {
 	if (!Started) return;
+	
 	Raycast();
 
 	UpdateMaterial();
@@ -201,10 +202,8 @@ void ALabyBotPawn::InitBattery() {
 void ALabyBotPawn::UpdateBattery() {
 	BatteryLeft--;
 
-	if (BatteryLeft > 0)
-		PrintString(FString::Printf(TEXT("Battery Left: %d"), BatteryLeft));
-	else {
-		PrintString(FString::Printf(TEXT("No More Battery")));
+	if (BatteryLeft <= 0){
+		//PrintString(FString::Printf(TEXT("No More Battery")));
 		GetWorldTimerManager().ClearTimer(TimeHandle_Battery);
 	}
 

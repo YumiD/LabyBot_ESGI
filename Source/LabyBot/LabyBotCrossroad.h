@@ -23,7 +23,7 @@ protected:
 public:
 	ALabyBotCrossroad();
 
-	void ChangeDirection(class AActor* otherActor);
+	void UpdateDirection(DirectionPawn direction);
 
 	UFUNCTION()
 		void Event(class AActor* overlappedActor, class AActor* otherActor);
