@@ -237,8 +237,9 @@ void ALabyBotPawn::SetDirectionPawn(DirectionPawn direction) {
 }
 
 void ALabyBotPawn::Goal() {
-	PrintString(FString::Printf(TEXT("GOAAAAAAAAAAAAAL")));
+	GetWorldTimerManager().ClearTimer(TimeHandle_Battery);
 	PlayerEnd.Broadcast(true);
+	MoveSpeed = 0.f;
 }
 
 int32 ALabyBotPawn::GetCurrentBattery()

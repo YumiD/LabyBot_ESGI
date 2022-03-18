@@ -45,6 +45,9 @@ public:
 		UButton* StartButton;
 
 	UPROPERTY(meta = (BindWidget))
+		UTextBlock* StartText;
+
+	UPROPERTY(meta = (BindWidget))
 		UProgressBar* EnergyBar;
 
 	UPROPERTY(meta = (BindWidget))
@@ -74,4 +77,5 @@ private:
 	ALabyBotCrossroad* Crossroad1Object;
 	DirectionPawn Crossroad1Direction = DirectionPawn::None;
 	UEndScreenWidget* EndScreen;
+	bool isOver = false;
 };

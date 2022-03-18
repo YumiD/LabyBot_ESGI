@@ -11,12 +11,26 @@ class ALabyBotTimer;
 UInGameHUD::UInGameHUD(const FObjectInitializer &ObjectInitializer) : Super(ObjectInitializer)
 {
 	PlayerPawn = Cast<ALabyBotPawn>(UGameplayStatics::GetPlayerPawn(UUserWidget::GetWorld(), 0));
+
+	UWorld* world = GetWorld();
+	for (TObjectIterator<ALabyBotCrossroad> It; It; ++It)
+	{
+		ALabyBotCrossroad* crossRoad = *It;
+		if (crossRoad->GetWorld() == world) {
+			crossRoads.Add(crossRoad);
+		}
+	}
 }
 
 void UInGameHUD::StartGame()
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Start!"));
+	if (PlayerPawn->Started && isOver)
+	{
+		UGameplayStatics::OpenLevel(this, FName("TwinStickExampleMap"));
+	}
 	PlayerPawn->Started = true;
+	StartText->SetText(FText::FromString("Restart"));
+	StartButton->SetVisibility(ESlateVisibility::Hidden);
 	PlayerPawn->InitBattery();
 	Timer->StartTimer();
 	ImageLevel->SetVisibility(ESlateVisibility::Hidden);
@@ -27,8 +41,10 @@ void UInGameHUD::OnEndScreen(bool isVictory)
 {
 	if (EndScreen == nullptr)
 		return;
+	StartButton->SetVisibility(ESlateVisibility::Visible);
 	EndScreen->AddToViewport(); // Add it to the viewport so the Construct() method in the UUserWidget:: is run.
 	EndScreen->UpdateEndText(isVictory);
+	isOver = true;
 }
 
 void UInGameHUD::UpdateHUD(FString Time) const
