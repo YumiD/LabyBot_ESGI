@@ -7,10 +7,12 @@
 #include "Math/Vector.h"
 
 class ALabyBotTimer;
-
+#define PrintString(String) GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::White, String)
 UInGameHUD::UInGameHUD(const FObjectInitializer &ObjectInitializer) : Super(ObjectInitializer)
 {
 	PlayerPawn = Cast<ALabyBotPawn>(UGameplayStatics::GetPlayerPawn(UUserWidget::GetWorld(), 0));
+	//Crossroad1Object = FindObject<ALabyBotCrossroad>(NULL, "LabyBotCrossroad1");
+
 	//Timer = UObject::CreateDefaultSubobject<ALabyBotTimer>(TEXT("ALabyBotTimer"));
 	//SpawnObject(FVector(0,0,0), FRotator(0, 0, 0));	 
 }
@@ -20,14 +22,42 @@ void UInGameHUD::StartGame()
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Start!"));
 	PlayerPawn->Started = true;
 	Timer->StartTimer();
-	ImageLevel->SetOpacity(0);
-	//Crossroad1->BeginDestroy();
+	ImageLevel->SetVisibility(ESlateVisibility::Hidden);
+	Crossroad1->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void UInGameHUD::UpdateHUD(FString Time) const
 {
 	TimeText->SetText(FText::AsCultureInvariant(Time));
 	EnergyBar->SetPercent(static_cast<float>(PlayerPawn->GetCurrentBattery()) / PlayerPawn->MaxBattery);
+}
+
+void UInGameHUD::UpdateCrossroad()
+{
+	switch (Crossroad1Direction) {
+		case DirectionPawn::None:
+			Crossroad1Text->SetText(FText::AsCultureInvariant("U"));
+			Crossroad1Direction = DirectionPawn::Up;
+			break;
+		case DirectionPawn::Up:
+			Crossroad1Text->SetText(FText::AsCultureInvariant("R"));
+			Crossroad1Direction = DirectionPawn::Right;
+			break;
+		case DirectionPawn::Right:
+			Crossroad1Text->SetText(FText::AsCultureInvariant("D"));
+			Crossroad1Direction = DirectionPawn::Down;
+			break;
+		case DirectionPawn::Down:
+			Crossroad1Text->SetText(FText::AsCultureInvariant("L"));
+			Crossroad1Direction = DirectionPawn::Left;
+			break;
+		case DirectionPawn::Left:
+			Crossroad1Text->SetText(FText::AsCultureInvariant(""));
+			Crossroad1Direction = DirectionPawn::None;
+			break;
+		default:
+			break;
+	}
 }
 
 void UInGameHUD::NativeConstruct()

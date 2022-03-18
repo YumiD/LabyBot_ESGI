@@ -16,6 +16,7 @@
 
 class ALabyBotTimer;
 class ALabyBotPawn;
+class ALabyBotCrossroad;
 
 /**
  *
@@ -34,6 +35,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void StartGame();
 
+	UFUNCTION(BlueprintCallable)
+		void UpdateCrossroad();
+
 	UPROPERTY(meta = (BindWidget))
 		UButton* StartButton;
 
@@ -46,6 +50,9 @@ public:
 	UPROPERTY(meta = (BindWidget))
 		UButton* Crossroad1;
 
+	UPROPERTY(meta = (BindWidget))
+		UTextBlock* Crossroad1Text;
+
 	void UpdateHUD(FString Time) const;
 	int32 CallTracker = 60;
 
@@ -54,5 +61,7 @@ public:
 private:
 	ALabyBotTimer* Timer;
 	ALabyBotPawn* PlayerPawn;
+	ALabyBotCrossroad* Crossroad1Object;
+	DirectionPawn Crossroad1Direction = DirectionPawn::None;
 
 };

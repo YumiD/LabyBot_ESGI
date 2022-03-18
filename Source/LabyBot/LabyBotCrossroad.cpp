@@ -17,8 +17,8 @@ void ALabyBotCrossroad::Event(class AActor* overlappedActor, class AActor* other
 	if (pawn != NULL) {
 		pawn->SetDirectionPawn(directionSelection);
 	}
-	//GetWorldTimerManager().SetTimer(TimeHandle, this, &ALabyBotCrossroad::ChangeDirection(otherActor), 3.0f, false, 1.0f);
 }
 
-void ALabyBotCrossroad::ChangeDirection(class AActor* otherActor) {
+void ALabyBotCrossroad::UpdateDirection(DirectionPawn direction) {
+	currentDirectionPawn = direction;
 }
