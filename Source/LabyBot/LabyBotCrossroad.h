@@ -37,4 +37,5 @@ private:
 
 	FTimerHandle TimeHandle;
 	
+	bool isActive;
 };

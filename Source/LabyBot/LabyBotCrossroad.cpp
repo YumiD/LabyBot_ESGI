@@ -8,6 +8,7 @@
 ALabyBotCrossroad::ALabyBotCrossroad() {
 	OnActorBeginOverlap.AddDynamic(this, &ALabyBotCrossroad::Event);
 	currentDirectionPawn = directionSelection;
+	isActive = true;
 }
 
 void ALabyBotCrossroad::BeginPlay()
@@ -17,9 +18,10 @@ void ALabyBotCrossroad::BeginPlay()
 
 void ALabyBotCrossroad::Event(class AActor* overlappedActor, class AActor* otherActor) {
 	ALabyBotPawn* pawn = Cast<ALabyBotPawn>(otherActor);
-	if (pawn != NULL) {
+	if (pawn != NULL && isActive) {
 		if (currentDirectionPawn != DirectionPawn::None) {
 			pawn->SetDirectionPawn(currentDirectionPawn);
+			isActive = false;
 		}
 	}
 }
