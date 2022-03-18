@@ -73,12 +73,14 @@ void ALabyBotPawn::BeginPlay()
 {
 	Super::BeginPlay();
 
-	InitBattery();
+	BatteryInitialized = false;
 }
 
 void ALabyBotPawn::Tick(float DeltaSeconds)
 {
 	if (!Started) return;
+	if (Started && !BatteryInitialized) InitBattery();;
+
 	Raycast();
 
 	UpdateMaterial();
@@ -203,16 +205,15 @@ void ALabyBotPawn::Raycast() {
 }
 
 void ALabyBotPawn::InitBattery() {
+	BatteryInitialized = true;
 	GetWorldTimerManager().SetTimer(TimeHandle_Battery, this, &ALabyBotPawn::UpdateBattery, 3.0f, true, 1.0f);
 }
 
 void ALabyBotPawn::UpdateBattery() {
 	BatteryLeft--;
 
-	if (BatteryLeft > 0)
-		PrintString(FString::Printf(TEXT("Battery Left: %d"), BatteryLeft));
-	else {
-		PrintString(FString::Printf(TEXT("No More Battery")));
+	if (BatteryLeft <= 0){
+		//PrintString(FString::Printf(TEXT("No More Battery")));
 		GetWorldTimerManager().ClearTimer(TimeHandle_Battery);
 	}
 

@@ -86,6 +86,7 @@ private:
 	/* Handle for Battery */
 	FTimerHandle TimeHandle_Battery;
 	int32 BatteryLeft;
+	bool BatteryInitialized;
 
 	DirectionPawn currentDirectionPawn;
 

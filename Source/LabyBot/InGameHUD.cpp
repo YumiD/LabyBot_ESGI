@@ -20,6 +20,8 @@ void UInGameHUD::StartGame()
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Start!"));
 	PlayerPawn->Started = true;
 	Timer->StartTimer();
+	ImageLevel->SetOpacity(0);
+	//Crossroad1->BeginDestroy();
 }
 
 void UInGameHUD::UpdateHUD(FString Time) const

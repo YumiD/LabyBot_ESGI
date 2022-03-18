@@ -9,6 +9,7 @@
 #include "Components/Button.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
+#include "Components/Image.h"
 #include "GameFramework/Actor.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "InGameHUD.generated.h"
@@ -38,6 +39,13 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 		UProgressBar* EnergyBar;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* ImageLevel;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* Crossroad1;
+
 	void UpdateHUD(FString Time) const;
 	int32 CallTracker = 60;
 
