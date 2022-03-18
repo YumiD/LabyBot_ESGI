@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "LabyBotPawn.h"
 #include "LabyBotTimer.h"
+#include "LabyBotCrossroad.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
 #include "Components/ProgressBar.h"
@@ -55,6 +56,7 @@ public:
 
 	void UpdateHUD(FString Time) const;
 	int32 CallTracker = 60;
+	TArray<ALabyBotCrossroad*> crossRoads;
 
 	virtual void NativeConstruct() override;
 
