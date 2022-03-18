@@ -18,7 +18,9 @@ void ALabyBotCrossroad::BeginPlay()
 void ALabyBotCrossroad::Event(class AActor* overlappedActor, class AActor* otherActor) {
 	ALabyBotPawn* pawn = Cast<ALabyBotPawn>(otherActor);
 	if (pawn != NULL) {
-		pawn->SetDirectionPawn(currentDirectionPawn);
+		if (currentDirectionPawn != DirectionPawn::None) {
+			pawn->SetDirectionPawn(currentDirectionPawn);
+		}
 	}
 }
 

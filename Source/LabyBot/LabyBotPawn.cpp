@@ -140,9 +140,9 @@ void ALabyBotPawn::Raycast() {
 	FCollisionQueryParams CollisionParms;
 	CollisionParms.AddIgnoredActor(this->GetOwner());
 
-	DrawDebugLine(GetWorld(), Start, EndForward, FColor::Green, false, 1, 0, 1);
-	DrawDebugLine(GetWorld(), Start, EndLeft, FColor::Blue, false, 1, 0, 1);
-	DrawDebugLine(GetWorld(), Start, EndRight, FColor::Red, false, 1, 0, 1);
+	//DrawDebugLine(GetWorld(), Start, EndForward, FColor::Green, false, 1, 0, 1);
+	//DrawDebugLine(GetWorld(), Start, EndLeft, FColor::Blue, false, 1, 0, 1);
+	//DrawDebugLine(GetWorld(), Start, EndRight, FColor::Red, false, 1, 0, 1);
 
 	bool isHitForward = GetWorld()->LineTraceSingleByChannel(OutHit, Start, EndForward, ECC_Visibility, CollisionParms);
 	bool isHitLeft = GetWorld()->LineTraceSingleByChannel(OutHit, Start, EndLeft, ECC_Visibility, CollisionParms);
@@ -197,7 +197,7 @@ void ALabyBotPawn::Raycast() {
 
 void ALabyBotPawn::InitBattery() {
 	BatteryLeft = MaxBattery;
-	GetWorldTimerManager().SetTimer(TimeHandle_Battery, this, &ALabyBotPawn::UpdateBattery, 3.0f, true, 1.0f);
+	GetWorldTimerManager().SetTimer(TimeHandle_Battery, this, &ALabyBotPawn::UpdateBattery, 2.0f, true, 1.0f);
 }
 
 void ALabyBotPawn::UpdateBattery() {
