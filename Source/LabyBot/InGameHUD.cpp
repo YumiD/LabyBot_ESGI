@@ -43,6 +43,7 @@ void UInGameHUD::StartGame()
 
 void UInGameHUD::OnEndScreen(bool isVictory)
 {
+	EndScreen = CreateWidget<UEndScreenWidget>(GetWorld(), EndScreenClass);
 	if (EndScreen == nullptr)
 		return;
 	StartButton->SetVisibility(ESlateVisibility::Visible);
@@ -117,7 +118,6 @@ void UInGameHUD::NativeConstruct()
 	TimeText->SetText(FText::AsCultureInvariant(FString::FromInt(Timer->GetMaxTime())));
 	EnergyBar->SetPercent(100);
 	PlayerPawn->PlayerEnd.AddDynamic(this, &UInGameHUD::OnEndScreen);
-	EndScreen = CreateWidget<UEndScreenWidget>(GetWorld(), EndScreenClass);
 	GetAllButtons();
 	GetAllText();
 	for (int i = 0; i < CrossroadsButtons.Num(); i++) {
