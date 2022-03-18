@@ -16,7 +16,7 @@ bool UMainMenuWidget::Initialize()
 
 void UMainMenuWidget::OnClickStart()
 {
-	UGameplayStatics::OpenLevel(this, FName("TwinStickExampleMap"));
+	UGameplayStatics::OpenLevel(this, FName("Level1"));
 }
 
 void UMainMenuWidget::OnClickQuit()
