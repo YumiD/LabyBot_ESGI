@@ -19,6 +19,7 @@ void UInGameHUD::StartGame()
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Start!"));
 	PlayerPawn->Started = true;
+	PlayerPawn->InitBattery();
 	Timer->StartTimer();
 }
 

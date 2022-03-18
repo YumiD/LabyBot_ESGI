@@ -80,9 +80,6 @@ public:
 	static const FName FireRightBinding;
 
 private:
-
-	virtual void BeginPlay() override;
-
 	/* Handle for Battery */
 	FTimerHandle TimeHandle_Battery;
 	int32 BatteryLeft;
