@@ -37,7 +37,7 @@ public:
 		void StartGame();
 
 	UFUNCTION(BlueprintCallable)
-		void UpdateCrossroad();
+		void UpdateCrossroad(int i);
 
 	UPROPERTY(meta = (BindWidget))
 		UButton* StartButton;

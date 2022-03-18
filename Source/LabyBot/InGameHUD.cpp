@@ -20,12 +20,16 @@ UInGameHUD::UInGameHUD(const FObjectInitializer &ObjectInitializer) : Super(Obje
 	for (TObjectIterator<ALabyBotCrossroad> It; It; ++It)
 	{
 		ALabyBotCrossroad* crossRoad = *It;
+		//crossRoad->GetFullName();
+		//PrintString(FString::Printf(TEXT("name: %s"), crossRoad->GetFullName()));
+		//PrintString(crossRoad->GetFullName());
 		if (crossRoad->GetWorld() == world) {
 			crossRoads.Add(crossRoad);
 		}
 	}
+	crossRoads.Sort();
 
-	//PrintString("amount of crossRoads: %d", crossRoads.Num());
+	//PrintString(FString::Printf(TEXT("amount of crossRoads: %d"), crossRoads.Num()));
 }
 
 void UInGameHUD::StartGame()
@@ -36,6 +40,14 @@ void UInGameHUD::StartGame()
 	Timer->StartTimer();
 	ImageLevel->SetVisibility(ESlateVisibility::Hidden);
 	Crossroad1->SetVisibility(ESlateVisibility::Hidden);
+
+	/*crossRoads[0]->UpdateDirection(DirectionPawn::Left);
+
+	crossRoads[1]->UpdateDirection(DirectionPawn::Up);
+
+	crossRoads[2]->UpdateDirection(DirectionPawn::Down);
+
+	crossRoads[3]->UpdateDirection(DirectionPawn::Right);*/
 }
 
 void UInGameHUD::UpdateHUD(FString Time) const
@@ -44,28 +56,28 @@ void UInGameHUD::UpdateHUD(FString Time) const
 	EnergyBar->SetPercent(static_cast<float>(PlayerPawn->GetCurrentBattery()) / PlayerPawn->MaxBattery);
 }
 
-void UInGameHUD::UpdateCrossroad()
+void UInGameHUD::UpdateCrossroad(int i)
 {
 	switch (Crossroad1Direction) {
 		case DirectionPawn::None:
 			Crossroad1Text->SetText(FText::AsCultureInvariant("U"));
 			Crossroad1Direction = DirectionPawn::Up;
-			crossRoads[0]->UpdateDirection(DirectionPawn::Up);
+			crossRoads[i]->UpdateDirection(DirectionPawn::Up);
 			break;
 		case DirectionPawn::Up:
 			Crossroad1Text->SetText(FText::AsCultureInvariant("R"));
 			Crossroad1Direction = DirectionPawn::Right;
-			crossRoads[0]->UpdateDirection(DirectionPawn::Right);
+			crossRoads[i]->UpdateDirection(DirectionPawn::Right);
 			break;
 		case DirectionPawn::Right:
 			Crossroad1Text->SetText(FText::AsCultureInvariant("D"));
 			Crossroad1Direction = DirectionPawn::Down;
-			crossRoads[0]->UpdateDirection(DirectionPawn::Down);
+			crossRoads[i]->UpdateDirection(DirectionPawn::Down);
 			break;
 		case DirectionPawn::Down:
 			Crossroad1Text->SetText(FText::AsCultureInvariant("L"));
 			Crossroad1Direction = DirectionPawn::Left;
-			crossRoads[0]->UpdateDirection(DirectionPawn::Left);
+			crossRoads[i]->UpdateDirection(DirectionPawn::Left);
 			break;
 		case DirectionPawn::Left:
 			Crossroad1Text->SetText(FText::AsCultureInvariant(""));
