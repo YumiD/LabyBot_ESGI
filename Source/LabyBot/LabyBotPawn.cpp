@@ -54,7 +54,6 @@ ALabyBotPawn::ALabyBotPawn()
 	MoveSpeed = 500.0f;
 
 	currentDirectionPawn = DirectionPawn::Up;
-	BatteryLeft = MaxBattery;
 }
 
 void ALabyBotPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -68,19 +67,10 @@ void ALabyBotPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAxis(FireRightBinding);
 }
 
-// Called when the game starts or when spawned
-void ALabyBotPawn::BeginPlay()
-{
-	Super::BeginPlay();
-
-	BatteryInitialized = false;
-}
-
 void ALabyBotPawn::Tick(float DeltaSeconds)
 {
 	if (!Started) return;
-	if (Started && !BatteryInitialized) InitBattery();;
-
+	
 	Raycast();
 
 	UpdateMaterial();
@@ -205,7 +195,7 @@ void ALabyBotPawn::Raycast() {
 }
 
 void ALabyBotPawn::InitBattery() {
-	BatteryInitialized = true;
+	BatteryLeft = MaxBattery;
 	GetWorldTimerManager().SetTimer(TimeHandle_Battery, this, &ALabyBotPawn::UpdateBattery, 3.0f, true, 1.0f);
 }
 
